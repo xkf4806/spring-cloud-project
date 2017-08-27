@@ -1,0 +1,4 @@
+client:
+    name: eureka客户端开发环境
+info:
+    profile: dev

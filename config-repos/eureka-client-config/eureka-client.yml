@@ -1,0 +1,4 @@
+client:
+    name: 默认eureka客户端
+info:
+    profile: default
