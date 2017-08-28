@@ -1,6 +1,7 @@
 package com.springcloud.demo.eurekaclientconsumer.feign;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author xinj.xue
@@ -15,7 +16,7 @@ public class RemoteFeignClientHystrix implements RemoteFeignClient {
     }
 
     @Override
-    public void consume(String body) {
-
+    public String consume(String body) {
+        return "服务调用异常！";
     }
 }

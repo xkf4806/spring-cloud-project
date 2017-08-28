@@ -21,9 +21,10 @@ public class TestController {
         return remoteFeignClient.info();
     }
 
-    @GetMapping("/consume")
-    public void consume() {
-        String json = "{\"name\":\"zhangsan\",\"age\":35,\"height\":170}";
-        remoteFeignClient.consume(json);
+    @GetMapping("/cons")
+    public String consume() {
+        String json = "{\"name\":\"\",\"age\":35,\"height\":170}";
+        String ret = remoteFeignClient.consume(json);
+        return ret;
     }
 }
