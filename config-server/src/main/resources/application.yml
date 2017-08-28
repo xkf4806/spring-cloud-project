@@ -5,7 +5,7 @@ spring:
         git:
           uri: https://github.com/你自己的github名称/spring-cloud-project.git
           search-paths:
-              - config-repos/config-client-config
+              - config-repos/eureka-client-config
           username: 用户名
           password: 密码
   application:

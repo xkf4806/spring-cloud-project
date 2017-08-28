@@ -10,7 +10,7 @@ spring:
       label: master
       profile: dev
 server:
-  port: 3000
+  port: 3001
 eureka:
   client:
     service-url:

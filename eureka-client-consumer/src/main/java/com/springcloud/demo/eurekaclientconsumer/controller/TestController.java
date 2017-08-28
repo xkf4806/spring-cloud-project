@@ -12,12 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 public class TestController {
+
     @Autowired
     public RemoteFeignClient remoteFeignClient;
 
-    @GetMapping("/info")
+    @GetMapping("/test")
     public String invokeMethod() {
-        remoteFeignClient.info("foo");
-        return null;
+        return remoteFeignClient.info();
+    }
+
+    @GetMapping("/consume")
+    public void consume() {
+        String json = "{\"name\":\"zhangsan\",\"age\":35,\"height\":170}";
+        remoteFeignClient.consume(json);
     }
 }
