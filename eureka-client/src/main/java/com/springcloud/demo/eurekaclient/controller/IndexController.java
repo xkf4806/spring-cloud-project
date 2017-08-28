@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 public class IndexController {
-    @Value("${foo}") // 注意$的使用
+    @Value("${foo}") // 注意$的使用 来自远方的问候：
     private String value;
 
     @GetMapping("/foo")
     public String index() {
-        return "from server:" + value;
+        return "来自远方的问候：" + value;
     }
 
     @PostMapping(value = "/consume")

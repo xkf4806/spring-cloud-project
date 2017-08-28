@@ -11,6 +11,7 @@ spring:
       profile: dev
 server:
   port: 3001
+#  prot: 3000 3001
 eureka:
   client:
     service-url:
