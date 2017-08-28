@@ -1,10 +1,19 @@
 package com.springcloud.demo.eurekaclient.controller;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.springcloud.demo.eurekaclient.vo.PersonVO;
+import com.thoughtworks.xstream.io.json.JsonWriter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.json.JsonJsonParser;
+import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.awt.*;
+import java.util.List;
 
 /**
  * @author xinj.xue
@@ -21,8 +30,16 @@ public class IndexController {
         return "来自远方的问候：" + value;
     }
 
-    @PostMapping(value = "/consume")
-    public void consume(@RequestBody String body) {
-        System.out.println("new client:" + body);
+    @RequestMapping(value = "/consume",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String consume(@RequestBody @Valid PersonVO personVO, BindingResult result) {
+        if (result.hasErrors()) {
+            List<ObjectError> allErrors = result.getAllErrors();
+            StringBuilder sb = new StringBuilder();
+            for (ObjectError error : allErrors) {
+                sb.append(error.getDefaultMessage());
+            }
+            return sb.toString();
+        }
+        return "您好~~";
     }
 }
