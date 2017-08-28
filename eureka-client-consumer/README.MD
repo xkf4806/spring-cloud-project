@@ -1,5 +1,5 @@
 - 这是eureka客户端
-- 支持feign+hystrix熔断支持，需要在application.properties中添加
+- 支持feign+hystrix熔断支持，需要在application.yml中添加
 -
 feign:
   hystrix:
