@@ -1,18 +1,13 @@
 package com.springcloud.demo.eurekaclient.controller;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.springcloud.demo.eurekaclient.vo.PersonVO;
-import com.thoughtworks.xstream.io.json.JsonWriter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.json.JsonJsonParser;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -30,16 +25,28 @@ public class IndexController {
         return "来自远方的问候：" + value;
     }
 
-    @RequestMapping(value = "/consume",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String consume(@RequestBody @Valid PersonVO personVO, BindingResult result) {
+    @RequestMapping(value = "/consume",method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public PersonVO consume(@RequestBody @Valid PersonVO personVO, BindingResult result) throws Exception {
         if (result.hasErrors()) {
             List<ObjectError> allErrors = result.getAllErrors();
             StringBuilder sb = new StringBuilder();
             for (ObjectError error : allErrors) {
-                sb.append(error.getDefaultMessage());
+                sb.append(error.getDefaultMessage()).append(",");
             }
-            return sb.toString();
+            personVO.setErrMsg(sb.substring(0,sb.lastIndexOf(",")));
         }
-        return "您好~~";
+
+        return personVO;
+    }
+
+    @PostMapping(value = "/dealParam")
+    public String dealParam(@RequestParam("param") String param, @RequestBody @Valid PersonVO vo,BindingResult result) {
+        if (result.hasErrors()) {
+            return "参数不合法！";
+        }
+        System.out.println(param + "..." + vo);
+        return "Hello:" + param;
     }
 }
