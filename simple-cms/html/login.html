@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <form class="form-horizontal loginForm" role="form">
+        <div class="form-group form-item-child">
+            <label for="username">用户名：</label>
+            <div class="form-content">
+                <input class="form-control" type="text" id="username" name="username">
+            </div>
+        </div>
+        <div class="form-group form-item-child">
+            <label for="password">密码：</label>
+            <div class="form-content">
+                <input class="form-control" type="password" id="password" name="password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary btn-large btn-login">登录</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<script src="https://cdn.bootcss.com/jquery.serializeJSON/2.8.1/jquery.serializejson.js"></script>
+<script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.js"></script>
+<script src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
+<script src="../js/form-validate.js"></script>
+<script src="../js/common.js"></script>
+<script>
+    $(function () {
+        var sign = sessionStorage.getItem('sign');
+        if (sign == '' || sign == null) {
+
+        }
+        $('.loginForm').validate(config_opts.validateForm(config_opts.submitLoginForm))
+    })
+    var config_opts = {
+        validateForm: function (callback) {
+            var icon = "<i class='fa fa-times-circle'></i> ";
+            return {
+                rules: {
+                    username: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    password: {
+                        required: true
+                    }
+                }, messages: {
+                    username: {
+                        required: icon + "请输入用户名",
+                        maxlength: icon + "用户名不能超过20个字符"
+                    },
+                    password: {
+                        required: icon + "请输入密码"
+                    }
+                },
+                submitHandler: function (form) {
+                    callback(form);
+                }
+            }
+        },
+        submitLoginForm: function (form) {
+            var formData = $(form).serializeJSON();
+            $.ajax({
+                url: zuul_server.url + '/login',
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json;charset=utf-8',
+                success: function (data) {
+                    if (data.status == 500) {
+                        alert(data.message)
+                    } else {
+                        var result = data.result;
+                        global_opt.setSign(result);
+                        // 跳转到首页
+                        location.href = 'index.html';
+                    }
+                },
+                failure: function (error) {
+                    alert('未知原因')
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>

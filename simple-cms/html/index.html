@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+<h1>This is home page</h1>
+<div class="col-sm-offset-2 col-sm-10">
+    <button class="btn btn-default btn-users">users</button>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<script src="../js/common.js"></script>
+
+<script>
+    $(function () {
+        $('.btn-users').click(function () {
+            $.ajax({
+                url: zuul_server.url + '/users',
+                type: 'get',
+                beforeSend: function(request) {
+                    var signVal = global_opt.getSignHeader();
+                    if (signVal == 'Bearer null') {
+                        alert('请重新登录')
+                        location.href = 'login.html'
+                    }
+                    request.setRequestHeader("Authorization", global_opt.getSignHeader());
+                },
+                success: function (resp) {
+                    if (resp.status == 500) {
+                        alert('认证失败，请重新登录')
+                        location.href = 'login.html'
+                    } else {
+                        console.log(resp.data)
+                    }
+
+                },
+                error: function (resp) {
+                    var json = JSON.parse(resp.responseText);
+                    if (json.status == 500) {
+                        alert('认证失败，请重新登录')
+                        location.href = 'login.html'
+                    }
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>
